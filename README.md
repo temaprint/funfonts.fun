@@ -2,6 +2,8 @@
 
 A modern web application for browsing and downloading free fonts built with Astro. FunFonts.fun provides a curated collection of high-quality fonts with instant downloads and no registration required.
 
+![FunFonts](public/funfonts-01.png)
+![FunFonts2](public/funfonts-02.png)
 ## Features
 
 - **Free Font Downloads**: Access to hundreds of free fonts in TTF and OTF formats
