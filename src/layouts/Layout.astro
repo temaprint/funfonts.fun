@@ -1,0 +1,255 @@
+---
+export interface Props {
+    title: string;
+    description?: string;
+    keywords?: string;
+    ogImage?: string;
+    canonicalURL?: string;
+    noindex?: boolean;
+}
+
+const { 
+    title, 
+    description = "Download beautiful, high-quality fonts for free. No registration required. Perfect for designers, developers, and creative projects.",
+    keywords = "free fonts, font download, typography, design fonts, web fonts, TTF fonts, OTF fonts",
+    ogImage = "/og-image.jpg",
+    canonicalURL = Astro.url.href,
+    noindex = false
+} = Astro.props;
+
+const siteName = "FunFonts.fun";
+const siteURL = "https://funfonts.fun";
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
+        <meta name="author" content="FunFonts.fun" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#667eea" />
+        
+        {noindex && <meta name="robots" content="noindex, nofollow" />}
+        {!noindex && <meta name="robots" content="index, follow" />}
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href={canonicalURL} />
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:site_name" content={siteName} />
+        
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={canonicalURL} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={ogImage} />
+        
+        <!-- Favicons -->
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        
+        <!-- Preconnect to external domains -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="preconnect" href="https://images.pexels.com">
+        
+        <!-- Font loading optimization -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        
+        <!-- JSON-LD Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "FunFonts.fun",
+            "url": "https://funfonts.fun",
+            "description": "Free font downloads without registration. High-quality typography for designers and developers.",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://funfonts.fun/?search={search_term_string}",
+                "query-input": "required name=search_term_string"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "FunFonts.fun",
+                "url": "https://funfonts.fun"
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>
+
+<style is:global>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+    }
+
+    .btn-secondary:hover {
+        box-shadow: 0 10px 30px rgba(116, 185, 255, 0.3);
+    }
+
+    .search-container {
+        position: relative;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 16px 24px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .font-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .font-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 24px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .font-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .font-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #ff6b6b, #ee5a24, #feca57, #48dbfb);
+        border-radius: 20px 20px 0 0;
+    }
+
+    .font-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #2d3436;
+        margin-bottom: 16px;
+        text-transform: capitalize;
+    }
+
+    .font-preview {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        transition: transform 0.3s ease;
+    }
+
+    .font-preview:hover {
+        transform: scale(1.05);
+    }
+
+    .font-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 16px;
+        }
+
+        .font-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .font-actions {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .font-actions .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>

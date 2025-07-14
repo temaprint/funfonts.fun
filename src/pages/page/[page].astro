@@ -1,0 +1,248 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import FontCard from '../../components/FontCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import fontsData from '../../data/fonts.json';
+
+export async function getStaticPaths() {
+    const FONTS_PER_PAGE = 12;
+    const totalFonts = fontsData.length;
+    const totalPages = Math.ceil(totalFonts / FONTS_PER_PAGE);
+    
+    const paths = [];
+    for (let i = 2; i <= totalPages; i++) {
+        paths.push({
+            params: { page: i.toString() },
+            props: { 
+                currentPage: i,
+                totalPages,
+                totalFonts,
+                fontsPerPage: FONTS_PER_PAGE
+            }
+        });
+    }
+    
+    return paths;
+}
+
+const { currentPage, totalPages, totalFonts, fontsPerPage } = Astro.props;
+
+// Get fonts for current page
+const startIndex = (currentPage - 1) * fontsPerPage;
+const endIndex = startIndex + fontsPerPage;
+const currentFonts = fontsData.slice(startIndex, endIndex);
+
+const pageTitle = `Free Fonts - Page ${currentPage} | FunFonts.fun`;
+const pageDescription = `Browse page ${currentPage} of our free font collection. Download high-quality fonts without registration. ${totalFonts} fonts available.`;
+---
+
+<Layout 
+    title={pageTitle}
+    description={pageDescription}
+    keywords="free fonts download, typography, design fonts, web fonts, TTF fonts, OTF fonts, font collection, page navigation"
+    canonicalURL={`https://funfonts.fun/page/${currentPage}`}
+>
+    <Header />
+    
+    <main role="main">
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero-title" role="banner">
+                    Free Fonts
+                    <span class="highlight">Page {currentPage}</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Showing {startIndex + 1}-{Math.min(endIndex, totalFonts)} of {totalFonts} fonts
+                </p>
+            </div>
+        </section>
+
+        <section class="fonts-section" aria-labelledby="fonts-page">
+            <div class="container">
+                <nav class="breadcrumb" aria-label="Breadcrumb navigation">
+                    <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                            <a itemprop="item" href="/">
+                                <span itemprop="name">Home</span>
+                            </a>
+                            <meta itemprop="position" content="1" />
+                        </li>
+                        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                            <span itemprop="name">Page {currentPage}</span>
+                            <meta itemprop="position" content="2" />
+                        </li>
+                    </ol>
+                </nav>
+                
+                <h2 class="section-title" id="fonts-page">
+                    Font Collection 
+                    <span class="font-count">({totalFonts} fonts available)</span>
+                </h2>
+                
+                <div class="font-grid" role="list" aria-label="Font collection">
+                    {currentFonts.map(font => (
+                        <div role="listitem">
+                            <FontCard font={font} />
+                        </div>
+                    ))}
+                </div>
+                
+                <Pagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                />
+            </div>
+        </section>
+        
+        <!-- Structured Data for Paginated Content -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": `Free Font Collection - Page ${currentPage}`,
+            "description": `Page ${currentPage} of our curated free font collection`,
+            "url": `https://funfonts.fun/page/${currentPage}`,
+            "isPartOf": {
+                "@type": "WebSite",
+                "name": "FunFonts.fun",
+                "url": "https://funfonts.fun"
+            },
+            "mainEntity": {
+                "@type": "ItemList",
+                "numberOfItems": currentFonts.length,
+                "itemListElement": [
+                    ${currentFonts.map((font, index) => `{
+                        "@type": "SoftwareApplication",
+                        "position": ${startIndex + index + 1},
+                        "name": "${font.title}",
+                        "applicationCategory": "Font",
+                        "operatingSystem": "Windows, macOS, Linux",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "downloadUrl": "https://funfonts.fun/font/${font.title}"
+                    }`).join(',')}
+                ]
+            }
+        }
+        </script>
+    </main>
+</Layout>
+
+<style>
+    .breadcrumb ol {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 20px 0;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        list-style: none;
+        padding: 0;
+    }
+    
+    .breadcrumb li:not(:last-child)::after {
+        content: '/';
+        margin-left: 8px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .breadcrumb a {
+        color: #feca57;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .breadcrumb a:hover {
+        color: #ff9ff3;
+    }
+
+    .hero {
+        text-align: center;
+        padding: 60px 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        backdrop-filter: blur(10px);
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        color: white;
+        margin-bottom: 16px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        line-height: 1.2;
+    }
+
+    .highlight {
+        background: linear-gradient(135deg, #feca57, #ff9ff3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+    }
+
+    .highlight::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(135deg, #feca57, #ff9ff3);
+        border-radius: 2px;
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 400;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .fonts-section {
+        padding: 80px 0;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        text-align: center;
+        margin-bottom: 50px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .font-count {
+        font-size: 1rem;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.8);
+        text-shadow: none;
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            padding: 40px 0;
+        }
+
+        .fonts-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+    }
+</style>

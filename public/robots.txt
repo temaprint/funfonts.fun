@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://funfonts.fun/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Block access to admin areas (if any in future)
+Disallow: /admin/
+Disallow: /private/
+
+# Allow all font files and images
+Allow: /fonts/
+Allow: /*.ttf$
+Allow: /*.otf$
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.svg$

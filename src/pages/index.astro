@@ -1,0 +1,193 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import FontCard from '../components/FontCard.astro';
+import Pagination from '../components/Pagination.astro';
+import fontsData from '../data/fonts.json';
+
+// Pagination configuration
+const FONTS_PER_PAGE = 12;
+const totalFonts = fontsData.length;
+const totalPages = Math.ceil(totalFonts / FONTS_PER_PAGE);
+const currentPage = 1;
+
+// Get fonts for current page
+const startIndex = (currentPage - 1) * FONTS_PER_PAGE;
+const endIndex = startIndex + FONTS_PER_PAGE;
+const currentFonts = fontsData.slice(startIndex, endIndex);
+---
+
+<Layout 
+    title="FunFonts.fun - Free Font Downloads | No Registration Required"
+    description="Download beautiful, high-quality fonts for free. Browse our curated collection of TTF and OTF fonts. No registration required - instant downloads for designers and developers."
+    keywords="free fonts download, typography, design fonts, web fonts, TTF fonts, OTF fonts, font collection, graphic design, no registration fonts"
+>
+    <Header />
+    
+    <main role="main">
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero-title" role="banner">
+                    Discover Amazing
+                    <span class="highlight">Fonts</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Download beautiful fonts for free, no registration required!
+                </p>
+            </div>
+        </section>
+
+        <section class="fonts-section" aria-labelledby="featured-fonts">
+            <div class="container">
+                <h2 class="section-title" id="featured-fonts">
+                    Featured Fonts 
+                    <span class="font-count">({totalFonts} fonts available)</span>
+                </h2>
+                
+                <div class="font-grid" role="list" aria-label="Font collection">
+                    {currentFonts.map(font => (
+                        <div role="listitem">
+                            <FontCard font={font} />
+                        </div>
+                    ))}
+                </div>
+                
+                {totalPages > 1 && (
+                    <Pagination 
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                    />
+                )}
+            </div>
+        </section>
+        
+        <!-- Structured Data for Fonts -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "Free Font Collection",
+            "description": "Curated collection of free fonts for download",
+            "url": "https://funfonts.fun",
+            "mainEntity": {
+                "@type": "ItemList",
+                "numberOfItems": {fontsData.length},
+                "itemListElement": [
+                    {fontsData.map((font, index) => `{
+                        "@type": "SoftwareApplication",
+                        "position": ${index + 1},
+                        "name": "${font.title}",
+                        "applicationCategory": "Font",
+                        "operatingSystem": "Windows, macOS, Linux",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "downloadUrl": "https://funfonts.fun/font/${font.title}"
+                    }`).join(',')}
+                ]
+            }
+        }
+        </script>
+    </main>
+</Layout>
+
+<style>
+    .hero {
+        text-align: center;
+        padding: 60px 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        backdrop-filter: blur(10px);
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 700;
+        color: white;
+        margin-bottom: 16px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        line-height: 1.2;
+    }
+
+    .highlight {
+        background: linear-gradient(135deg, #feca57, #ff9ff3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+    }
+
+    .highlight::after {
+        content: '';
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(135deg, #feca57, #ff9ff3);
+        border-radius: 2px;
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 400;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .fonts-section {
+        padding: 80px 0;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: white;
+        text-align: center;
+        margin-bottom: 50px;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .font-count {
+        font-size: 1rem;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.8);
+        text-shadow: none;
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            padding: 40px 0;
+        }
+
+        .fonts-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

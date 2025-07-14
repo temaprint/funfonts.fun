@@ -1,0 +1,575 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import fontsData from '../../data/fonts.json';
+
+export async function getStaticPaths() {
+    return fontsData.map(font => ({
+        params: { slug: font.title },
+        props: { font }
+    }));
+}
+
+const { font } = Astro.props;
+
+const fontTitle = `${font.title} Font - Free Download | FunFonts.fun`;
+const fontDescription = `Download ${font.title} font for free. Available in ${font.ttf_files.length + font.otf_files.length} formats including TTF and OTF. No registration required.`;
+const fontKeywords = `${font.title} font, ${font.title} download, free ${font.title}, typography, font design`;
+---
+
+<Layout 
+    title={fontTitle}
+    description={fontDescription}
+    keywords={fontKeywords}
+    canonicalURL={`https://funfonts.fun/font/${font.title}`}
+>
+    <Header />
+    
+    <main role="main">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Breadcrumb navigation">
+                <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                        <a itemprop="item" href="/">
+                            <span itemprop="name">Home</span>
+                        </a>
+                        <meta itemprop="position" content="1" />
+                    </li>
+                    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                        <span itemprop="name">{font.title}</span>
+                        <meta itemprop="position" content="2" />
+                    </li>
+                </ol>
+            </nav>
+            
+            <article class="font-detail" itemscope itemtype="https://schema.org/SoftwareApplication">
+                <header class="font-header">
+                    <h1 class="font-title" itemprop="name">{font.title}</h1>
+                    <div class="download-all-section">
+                        <span class="download-count" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                            <meta itemprop="price" content="0" />
+                            <meta itemprop="priceCurrency" content="USD" />
+                            {font.ttf_files.length + font.otf_files.length} files available
+                        </span>
+                    </div>
+                </header>
+                
+                <div class="preview-gallery" role="img" aria-label={`${font.title} font preview gallery`}>
+                    <div class="main-preview-container">
+                        <img 
+                            src={font.src_pic_1} 
+                            alt={`${font.title} font preview - main display`}
+                            class="main-preview"
+                            id="mainPreview"
+                            itemprop="screenshot"
+                            width="800"
+                            height="400"
+                            loading="eager"
+                        />
+                    </div>
+                    
+                    <div class="preview-thumbnails" role="tablist" aria-label="Font preview options">
+                        <img src={font.src_pic_1} alt="Preview 1" class="thumbnail active" data-src={font.src_pic_1} role="tab" width="120" height="80" loading="lazy" />
+                        <img src={font.src_pic_2} alt="Preview 2" class="thumbnail" data-src={font.src_pic_2} role="tab" width="120" height="80" loading="lazy" />
+                        <img src={font.src_pic_3} alt="Preview 3" class="thumbnail" data-src={font.src_pic_3} role="tab" width="120" height="80" loading="lazy" />
+                        <img src={font.src_pic_4} alt="Preview 4" class="thumbnail" data-src={font.src_pic_4} role="tab" width="120" height="80" loading="lazy" />
+                        <img src={font.src_pic_5} alt="Preview 5" class="thumbnail" data-src={font.src_pic_5} role="tab" width="120" height="80" loading="lazy" />
+                    </div>
+                </div>
+                
+                <div class="font-info">
+                    <section class="downloads-card" aria-labelledby="download-section">
+                        <h2 id="download-section">Download Files</h2>
+                        <div class="files-grid">
+                            {font.ttf_files.length > 0 && (
+                                <div class="file-group">
+                                    <h3>TTF Files</h3>
+                                    <div class="file-list" role="list">
+                                        {font.ttf_files.map((ttfFile) => {
+                                            const fileName = ttfFile.split('/').pop() || 'Unknown';
+                                            const displayName = fileName.replace('.ttf', '');
+                                            return (
+                                                <div class="file-item" role="listitem" itemscope itemtype="https://schema.org/DownloadAction">
+                                                    <div class="file-info">
+                                                        <span class="file-name" itemprop="object">{displayName}</span>
+                                                        <span class="file-format">TTF</span>
+                                                    </div>
+                                                    <a 
+                                                        href={ttfFile} 
+                                                        download 
+                                                        class="btn btn-download"
+                                                        itemprop="url"
+                                                        aria-label={`Download ${displayName} TTF font file`}
+                                                    >
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2"/>
+                                                            <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2"/>
+                                                            <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                                                        </svg>
+                                                        Download
+                                                    </a>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {font.otf_files.length > 0 && (
+                                <div class="file-group">
+                                    <h3>OTF Files</h3>
+                                    <div class="file-list" role="list">
+                                        {font.otf_files.map((otfFile) => {
+                                            const fileName = otfFile.split('/').pop() || 'Unknown';
+                                            const displayName = fileName.replace('.otf', '');
+                                            return (
+                                                <div class="file-item" role="listitem" itemscope itemtype="https://schema.org/DownloadAction">
+                                                    <div class="file-info">
+                                                        <span class="file-name" itemprop="object">{displayName}</span>
+                                                        <span class="file-format">OTF</span>
+                                                    </div>
+                                                    <a 
+                                                        href={otfFile} 
+                                                        download 
+                                                        class="btn btn-download"
+                                                        itemprop="url"
+                                                        aria-label={`Download ${displayName} OTF font file`}
+                                                    >
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2"/>
+                                                            <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2"/>
+                                                            <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                                                        </svg>
+                                                        Download
+                                                    </a>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Hidden metadata for SEO -->
+                <meta itemprop="applicationCategory" content="Font" />
+                <meta itemprop="operatingSystem" content="Windows, macOS, Linux" />
+                <meta itemprop="description" content={fontDescription} />
+            </article>
+        </div>
+        
+        <!-- Structured Data for Individual Font -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "{font.title}",
+            "applicationCategory": "Font",
+            "operatingSystem": "Windows, macOS, Linux",
+            "description": "{fontDescription}",
+            "url": "https://funfonts.fun/font/{font.title}",
+            "screenshot": "{font.src_pic_1}",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD",
+                "availability": "https://schema.org/InStock"
+            },
+            "downloadUrl": [
+                {font.ttf_files.map(file => `"${file}"`).join(',')}
+                {font.otf_files.length > 0 && font.ttf_files.length > 0 ? ',' : ''}
+                {font.otf_files.map(file => `"${file}"`).join(',')}
+            ],
+            "fileFormat": [
+                {font.ttf_files.length > 0 ? '"TTF"' : ''}
+                {font.otf_files.length > 0 && font.ttf_files.length > 0 ? ',' : ''}
+                {font.otf_files.length > 0 ? '"OTF"' : ''}
+            ]
+        }
+        </script>
+    </main>
+</Layout>
+
+<style>
+    .breadcrumb ol {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 20px 0;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        list-style: none;
+        padding: 0;
+    }
+    
+    .breadcrumb li:not(:last-child)::after {
+        content: '/';
+        margin-left: 8px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .breadcrumb a {
+        color: #feca57;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .breadcrumb a:hover {
+        color: #ff9ff3;
+    }
+                <a href="/">Home</a>
+                <span>/</span>
+                <span>{font.title}</span>
+            </nav>
+            
+            <div class="font-detail">
+                <div class="font-header">
+                    <h1 class="font-title">{font.title}</h1>
+                    <div class="download-all-section">
+                        <span class="download-count">{font.ttf_files.length + font.otf_files.length} files available</span>
+                    </div>
+                </div>
+                
+                <div class="preview-gallery">
+                    <div class="main-preview-container">
+                        <img 
+                            src={font.src_pic_1} 
+                            alt={`${font.title} preview`}
+                            class="main-preview"
+                            id="mainPreview"
+                        />
+                    </div>
+                    
+                    <div class="preview-thumbnails">
+                        <img src={font.src_pic_1} alt="Preview 1" class="thumbnail active" data-src={font.src_pic_1} />
+                        <img src={font.src_pic_2} alt="Preview 2" class="thumbnail" data-src={font.src_pic_2} />
+                        <img src={font.src_pic_3} alt="Preview 3" class="thumbnail" data-src={font.src_pic_3} />
+                        <img src={font.src_pic_4} alt="Preview 4" class="thumbnail" data-src={font.src_pic_4} />
+                        <img src={font.src_pic_5} alt="Preview 5" class="thumbnail" data-src={font.src_pic_5} />
+                    </div>
+                </div>
+                
+                <div class="font-info">
+                    <div class="downloads-card">
+                        <h3>Download Files</h3>
+                        <div class="files-grid">
+                            {font.ttf_files.length > 0 && (
+                                <div class="file-group">
+                                    <h4>TTF Files</h4>
+                                    <div class="file-list">
+                                        {font.ttf_files.map((ttfFile) => {
+                                            const fileName = ttfFile.split('/').pop() || 'Unknown';
+                                            const displayName = fileName.replace('.ttf', '');
+                                            return (
+                                                <div class="file-item">
+                                                    <div class="file-info">
+                                                        <span class="file-name">{displayName}</span>
+                                                        <span class="file-format">TTF</span>
+                                                    </div>
+                                                    <a href={ttfFile} download class="btn btn-download">
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2"/>
+                                                            <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2"/>
+                                                            <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                                                        </svg>
+                                                        Download
+                                                    </a>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {font.otf_files.length > 0 && (
+                                <div class="file-group">
+                                    <h4>OTF Files</h4>
+                                    <div class="file-list">
+                                        {font.otf_files.map((otfFile) => {
+                                            const fileName = otfFile.split('/').pop() || 'Unknown';
+                                            const displayName = fileName.replace('.otf', '');
+                                            return (
+                                                <div class="file-item">
+                                                    <div class="file-info">
+                                                        <span class="file-name">{displayName}</span>
+                                                        <span class="file-format">OTF</span>
+                                                    </div>
+                                                    <a href={otfFile} download class="btn btn-download">
+                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2"/>
+                                                            <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2"/>
+                                                            <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                                                        </svg>
+                                                        Download
+                                                    </a>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 20px 0;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+    }
+
+    .breadcrumb a {
+        color: #feca57;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .breadcrumb a:hover {
+        color: #ff9ff3;
+    }
+
+    .font-detail {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 40px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .font-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .font-title {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #2d3436;
+        text-transform: capitalize;
+        margin: 0;
+    }
+    
+    .download-all-section {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    
+    .download-count {
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .preview-gallery {
+        margin-bottom: 40px;
+    }
+
+    .main-preview-container {
+        margin-bottom: 20px;
+    }
+
+    .main-preview {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-thumbnails {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 8px;
+    }
+
+    .thumbnail {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        opacity: 0.7;
+        border: 3px solid transparent;
+        flex-shrink: 0;
+    }
+
+    .thumbnail:hover {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    .thumbnail.active {
+        opacity: 1;
+        border-color: #ff6b6b;
+        transform: scale(1.05);
+    }
+
+    .downloads-card {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 16px;
+        padding: 30px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .downloads-card h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 20px;
+    }
+
+    .files-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .file-group h4 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2d3436;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .file-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .file-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .file-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .file-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .file-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3436;
+    }
+    
+    .file-format {
+        font-size: 0.8rem;
+        color: #636e72;
+        background: #e9ecef;
+        padding: 2px 8px;
+        border-radius: 12px;
+        width: fit-content;
+    }
+    
+    .btn-download {
+        font-size: 14px;
+        padding: 10px 16px;
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        white-space: nowrap;
+    }
+    
+    .btn-download:hover {
+        box-shadow: 0 8px 20px rgba(0, 184, 148, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .font-detail {
+            padding: 20px;
+        }
+
+        .font-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .font-title {
+            font-size: 2rem;
+        }
+
+        .download-all-section {
+            width: 100%;
+        }
+
+        .main-preview {
+            height: 250px;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 60px;
+        }
+
+        .file-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .btn-download {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mainPreview = document.getElementById('mainPreview');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                // Remove active class from all thumbnails
+                thumbnails.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked thumbnail
+                this.classList.add('active');
+                
+                // Update main preview
+                mainPreview.src = this.dataset.src;
+            });
+        });
+    });
+</script>

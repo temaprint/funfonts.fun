@@ -1,0 +1,230 @@
+---
+export interface Props {
+    font: {
+        title: string;
+        src_pic_1: string;
+        src_pic_2: string;
+        src_pic_3: string;
+        src_pic_4: string;
+        src_pic_5: string;
+        ttf_files: string[];
+        otf_files: string[];
+    };
+}
+
+const { font } = Astro.props;
+---
+
+<article class="font-card" itemscope itemtype="https://schema.org/SoftwareApplication">
+    <h3 class="font-title" itemprop="name">{font.title}</h3>
+    
+    <div class="preview-gallery" role="img" aria-label={`${font.title} font preview`}>
+        <img 
+            src={font.src_pic_1} 
+            alt={`${font.title} preview 1`}
+            class="font-preview main-preview"
+            itemprop="screenshot"
+            width="300"
+            height="200"
+            loading="lazy"
+        />
+        <div class="preview-thumbnails">
+            <img src={font.src_pic_2} alt={`${font.title} preview 2`} class="thumbnail" width="60" height="45" loading="lazy" />
+            <img src={font.src_pic_3} alt={`${font.title} preview 3`} class="thumbnail" width="60" height="45" loading="lazy" />
+            <img src={font.src_pic_4} alt={`${font.title} preview 4`} class="thumbnail" width="60" height="45" loading="lazy" />
+            <img src={font.src_pic_5} alt={`${font.title} preview 5`} class="thumbnail" width="60" height="45" loading="lazy" />
+        </div>
+    </div>
+
+    <div class="font-actions" role="group" aria-label="Font actions">
+        <a href={`/font/${font.title}`} class="btn btn-secondary" aria-label={`View details for ${font.title} font`}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" stroke-width="2"/>
+                <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            View Details
+        </a>
+        <section class="download-section" aria-labelledby="downloads-{font.title}">
+            <h4 class="download-label" id="downloads-{font.title}">Downloads:</h4>
+            <div class="download-buttons" role="list">
+                {font.ttf_files.map((ttfFile, index) => {
+                    const fileName = ttfFile.split('/').pop()?.replace('.ttf', '') || `TTF ${index + 1}`;
+                    return (
+                        <a 
+                            href={ttfFile} 
+                            download 
+                            class="btn btn-download"
+                            role="listitem"
+                            aria-label={`Download ${fileName} TTF font file`}
+                            itemprop="downloadUrl"
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2"/>
+                                <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            {fileName}
+                        </a>
+                    );
+                })}
+                {font.otf_files.map((otfFile, index) => {
+                    const fileName = otfFile.split('/').pop()?.replace('.otf', '') || `OTF ${index + 1}`;
+                    return (
+                        <a 
+                            href={otfFile} 
+                            download 
+                            class="btn btn-download"
+                            role="listitem"
+                            aria-label={`Download ${fileName} OTF font file`}
+                            itemprop="downloadUrl"
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2"/>
+                                <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            {fileName}
+                        </a>
+                    );
+                })}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden metadata for SEO -->
+    <meta itemprop="applicationCategory" content="Font" />
+    <meta itemprop="operatingSystem" content="Windows, macOS, Linux" />
+    <meta itemprop="offers" itemscope itemtype="https://schema.org/Offer" />
+    <meta itemprop="price" content="0" />
+    <meta itemprop="priceCurrency" content="USD" />
+</article>
+
+<style>
+    .preview-gallery {
+        margin-bottom: 16px;
+    }
+
+    .main-preview {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+    }
+
+    .main-preview:hover {
+        transform: scale(1.02);
+    }
+
+    .preview-thumbnails {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+
+    .thumbnail {
+        width: 60px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        opacity: 0.7;
+        flex-shrink: 0;
+    }
+
+    .thumbnail:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    .preview-thumbnails::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .preview-thumbnails::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 2px;
+    }
+
+    .preview-thumbnails::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 2px;
+    }
+
+    .preview-thumbnails::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .font-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .download-section {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .download-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #636e72;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .download-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .btn-download {
+        font-size: 12px;
+        padding: 8px 12px;
+        background: linear-gradient(135deg, #00b894, #00cec9);
+        flex: 1;
+        min-width: 120px;
+        justify-content: center;
+    }
+
+    .btn-download:hover {
+        box-shadow: 0 8px 20px rgba(0, 184, 148, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .download-buttons {
+            flex-direction: column;
+        }
+        
+        .btn-download {
+            min-width: auto;
+        }
+    }
+</style>
+
+<script>
+    // Add thumbnail click functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const fontCards = document.querySelectorAll('.font-card');
+        
+        fontCards.forEach(card => {
+            const mainPreview = card.querySelector('.main-preview');
+            const thumbnails = card.querySelectorAll('.thumbnail');
+            
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function() {
+                    const currentSrc = mainPreview.src;
+                    mainPreview.src = this.src;
+                    this.src = currentSrc;
+                });
+            });
+        });
+    });
+</script>
